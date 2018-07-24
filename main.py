@@ -1,7 +1,7 @@
 """ Main program CLI. Prints menu and allows user to view/add/remove shows """
 
-import dbActions
-import webScraper
+import db_actions
+import web_scraper
 
 
 shows = []
@@ -17,14 +17,14 @@ def main_loop():
     global has_shows
     if not has_shows:
         try:
-            shows = dbActions.get_shows()
+            shows = db_actions.get_shows()
             has_shows = True
         except:
             has_shows = False
     global token
     global login_success
     try:
-        token = 'Bearer ' + webScraper.login()
+        token = 'Bearer ' + web_scraper.login()
         login_success = True
     except:
         login_success = False
@@ -50,10 +50,10 @@ def main_loop():
     elif choice == 'E':
         if has_shows:
             for show in shows:
-                webScraper.get_episodes(token, show.show_id)
+                web_scraper.get_episodes(token, show.show_id)
     elif choice == 'F':
         if has_shows:
-            dbActions.write_to_db(shows)
+            db_actions.write_to_db(shows)
             exit(1)
 
 
@@ -81,9 +81,11 @@ def choice_b():
     """ shows details of a particular show """
     get_details = int(input('Enter show number to see details: '))
     print()
-    shows[get_details - 1].print_show()
+    if get_details > len(shows):
+        print('Invalid choice')
+    else:
+        shows[get_details - 1].print_show()
     print()
-
 
 
 def choice_c():
@@ -91,15 +93,15 @@ def choice_c():
     if login_success:
         try:
             search = input('Enter title to find: ')
-            s = webScraper.search(token, search)
+            s = web_scraper.search(token, search)
             exists = False
             for show in shows:
                 if show.title == s.title:
                     exists = True
                     break
             if not exists:
-                tmp = webScraper.get_episodes(token, s.show_id)
-                s.update(tmp['current_season'], tmp['next_ep_no'], tmp['next_air_date'])
+                tmp = web_scraper.get_episodes(token, s.show_id)
+                s.update(tmp['current_season'], tmp['next_ep_no'], tmp['next_air_date'], tmp['ep_title'], tmp['ep_overview'])
                 shows.append(s)
                 global has_shows
                 has_shows = True

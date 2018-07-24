@@ -48,7 +48,8 @@ def create_show(token, show_id):
     title = json_data.get('seriesName')
     time = json_data.get('airsTime')
     day = json_data.get('airsDayOfWeek')
-    s = Show.Show(show_id, network, title, time, day)
+    overview = json_data.get('overview')
+    s = Show.Show(show_id, network, title, time, day, overview)
     return s
 
 
@@ -108,14 +109,29 @@ def get_episode_details(token, url, season):
             if date.date() >= today.date():
                 season_details['next_ep_no'] = episode.get('airedEpisodeNumber')
                 season_details['next_air_date'] = episode.get('firstAired')
+                season_details['ep_title'] = episode.get('episodeName')
+                season_details['ep_overview'] = episode.get('overview')
                 break
             else:
                 season_details['next_ep_no'] = (json_data[len(json_data) - 1].get('airedEpisodeNumber'))
                 season_details['next_air_date'] = (json_data[len(json_data) - 1].get('firstAired'))
+                season_details['ep_title'] = (json_data[len(json_data) - 1].get('episodeName'))
+                season_details['ep_overview'] = (json_data[len(json_data) - 1].get('overview'))
     else:
         season_details['next_ep_no'] = 1
         season_details['next_air_date'] = (json_data[0].get('firstAired'))
-        if season_details['next_air_date'] == "":
-            season_details['next_air_date'] = 'TBD'
+        season_details['ep_title'] = (json_data[0].get('episodeName'))
+        season_details['ep_overview'] = (json_data[0].get('overview'))
+    if season_details['next_air_date'] == "":
+        season_details['next_air_date'] = 'TBD'
+    if season_details['ep_title'] == "" or season_details['ep_title'] is None:
+        season_details['ep_title'] = 'TBD'
+    if season_details['ep_overview'] == "" or season_details['ep_overview'] is None:
+        season_details['ep_overview'] = 'TBD'
     return season_details
+
+
+
+
+
 

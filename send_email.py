@@ -1,8 +1,8 @@
 """ Runs separately from the rest of the program. Updates next episode info and sends email reminders the day before and day of airing.
     Run daily with cron or equivalent """
 
-import dbActions
-import webScraper
+import db_actions
+import web_scraper
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -41,14 +41,15 @@ def new_episode_check():
                 message = show.title + ' will be airing tonight at ' + show.time + ' on ' + show.network
                 send_mail(show.title, message)
             elif air_date.date() == tomorrow.date():
-                message = show.title + ' will be airing tomorrow at ' + show.time + ' on ' + show.network
+                message = show.title + ' will be airing tomorrow at ' + show.time + ' on ' + show.network + '\n Season ' + str(show.current_season) + ' Episode ' + str(show.next_ep_no) + " " + show.ep_title + ': ' + show.ep_overview
                 send_mail(show.title, message)
 
 
 """ logs into theTVDB API, updates shows, and calls method to check if email should be sent """
-token = 'Bearer ' + webScraper.login()
-shows = dbActions.get_shows()
+token = 'Bearer ' + web_scraper.login()
+shows = db_actions.get_shows()
 for s in shows:
-    tmp = webScraper.get_episodes(token, s.show_id)
-    s.update(tmp['current_season'], tmp['next_ep_no'], tmp['next_air_date'])
+    tmp = web_scraper.get_episodes(token, s.show_id)
+    s.update(tmp['current_season'], tmp['next_ep_no'], tmp['next_air_date'], tmp['ep_title'], tmp['ep_overview'])
+    db_actions.write_to_db(shows)
 new_episode_check()
