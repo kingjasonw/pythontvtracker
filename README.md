@@ -4,14 +4,14 @@ Gets show info from TheTVDB api.
 Create a file, 'shows.xml', to store show info.
 Create a file, 'credentials.xml', to store api and email credentials:
 
-&lt;credentials&gt;
-    &lt;username&gt;Your tvdb username&lt;/username&gt;
-    &lt;userkey&gt;Your tvdb userkey&lt;/userkey&gt;
-    &lt;apikey&gt;Your tvdb api key&lt;/apikey&gt;
-    &lt;email&gt;From email&lt;/email&gt;
-    &lt;password&gt;From email password&lt;/password&gt;
-    &lt;emailto&gt;To email&lt;/emailto&gt;
-&lt;/credentials&gt;
+    <credentials>
+        <username>Your tvdb username</username>
+        <userkey>Your tvdb userkey</userkey>
+        <apikey>Your tvdb api key</apikey>
+        <email>From email</email>
+        <password>From email password</password>
+        <emailto>To email</emailto>
+    </credentials>
 
 Run 'python3 main.py' to launch command line interface. CLI allows you to add and remove shows, and view show info.
 
