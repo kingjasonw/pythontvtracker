@@ -1,6 +1,6 @@
 __pycache__/
-venv/
-.idea/
+/venv/
+/.idea/
 credentials.xml
 shows.xml
 .DS_Store
