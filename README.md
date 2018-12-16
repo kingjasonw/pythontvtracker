@@ -1,7 +1,9 @@
 # pythontvtracker
 
 Gets show info from TheTVDB api. 
+
 Create a file, 'shows.xml', to store show info.
+
 Create a file, 'credentials.xml', to store api and email credentials:
 
     <credentials>
